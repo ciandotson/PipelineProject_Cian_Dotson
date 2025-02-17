@@ -12,7 +12,7 @@ Donor 2 (2dpi): https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5660044/SRR56600
 
 Donor 2 (6dpi): https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5660045/SRR5660045
 
-To get the SRA Normalized data for each of these accessions, simply use `wget`
+To get the SRA Normalized data for each of these accessions, simply use `wget`:
 
 `wget https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5660030/SRR5660030`
 
@@ -21,3 +21,13 @@ To get the SRA Normalized data for each of these accessions, simply use `wget`
 `wget https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5660044/SRR5660044`  
 
 `wget https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5660045/SRR5660045`
+
+These files are not yet readable as fastq files, but you can extract the fastq files by using `fasterq-dump` NCBI's SRA-toolkit:
+
+`fasterq-dump SRR5660030`
+
+`fasterq-dump SRR5660033`
+
+`fasterq-dump SRR5660044`
+
+`fasterq-dump SRR5660045`
