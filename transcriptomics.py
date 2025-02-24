@@ -1,16 +1,58 @@
-cut -d '[' -f 5,7 hcmv.cds > hold1
-sed 's/ \[transl_except=(pos:1..3,aa:Met)]//g' hold1 | cat > hold2
-sed 's/\] \[gbkey=CDS/ /g' hold2 | cat > hold3
-sed 's/\[/>/g' hold3 | cat > hold4
-sed 's/ >/>/g' hold4 | cat > hcmv_cds.fasta
+# This is a python script that quickly runs a full transcriptomics analysis when given a series of RNA-seq fastq files and a reference genome #
+import argparse
+import sys
 
-grep ">" hcmv_cds.fasta | wc -l | cat > cds_count
-echo "The HCMV genome (NC_006273.2) has $(cat cds_count) CDS." > PipelineProject.log
+#function to parse command line arguments #
+def check_arg(args=None): 
+	parser = argparse.ArgumentParser(description= 'Produces a brief analysis of RNA-seq data')
+	parser.add_argument('-i', '--input',
+		help='path to input file',
+		required = 'True')
+	parser.add_argument('-o', '--output',
+		help = 'output file name',
+		required = 'True')
+	return parser.parse_args(args)
 
-kallisto quant -i ~/pipline/index/hcmv.idx -o ~/pipline/results/SRR5660030 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660030_1.fastq ~/pipline/raw_reads/fastqs/SRR5660030_2.fastq 
-kallisto quant -i ~/pipline/index/hcmv.idx -o ~/pipline/results/SRR5660033 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660033_1.fastq ~/pipline/raw_reads/fastqs/SRR5660033_2.fastq   
-kallisto quant -i ~/pipline/index/hcmv.idx -o ~/pipline/results/SRR5660044 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660044_1.fastq ~/pipline/raw_reads/fastqs/SRR5660044_2.fastq
-kallisto quant -i ~/pipline/index/hcmv.idx -o ~/pipline/results/SRR5660045 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660045_1.fastq ~/pipline/raw_reads/fastqs/SRR5660045_2.fastq 
+#retrieve command line arguments and assign to variables
+args = check_arg(sys.argv[1:])
+infile = args.input
+outfile = args.output
+
+
+# formating the CDS entries of HCMV into a fasta that only contains the protein IDs as entries #
+from Bio import SeqIO
+import re
+
+def FastGen(fasta): # function that formats a fasta file to only contain the protein id as its header #
+    ids = list() # list that will contain all the protein ids #
+    seqs = list() # list that will contain all the sequences #
+    with open(fasta, 'r') as f: # opening the connection to the fasta file #
+        for entry in SeqIO.parse(f, 'fasta'): # for each entry in the fasta reads as a fasta #
+            seqs.append(str(entry.seq + '\n')) # add each sequence to the seqs list plus a \n at the end #
+            found = re.findall(r"\[protein_id=([^\]]+)\]", entry.description) # regex command to find all of the characters that are found after 'protein_id=' and before the ']'
+            for lost in found: 
+                ids.append(str('>' + lost + '\n')) # append the protein id flanked by > and \n #
+    fin = list() # list to make the final fasta file #
+    for i in range(0, len(seqs)): # for each entry #
+        fin.append(ids[i]) # add the entry protein id #
+        fin.append(seqs[i]) # add the entry sequence #
+    fin = ''.join(fin) # join the list into a string #
+    return(fin)
+
+with open('hcmv_cds.fasta, 'w') as f:
+    f.write(FastGen(infile))
+
+import os
+os.system('grep ">" hcmv_cds.fasta | wc -l | cat > cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
+os.system('echo "The HCMV genome (NC_006273.2) has $(cat cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
+
+os.system('kallisto index -i ~/blank/hcmv.idx ~/blank/hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
+os.system('mkdir ~/blank/results') # unix command to make a directory for the results to go #
+
+os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660030 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660030_1.fastq ~/pipline/raw_reads/fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
+os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660033 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660033_1.fastq ~/pipline/raw_reads/fastqs/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
+os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660044 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660044_1.fastq ~/pipline/raw_reads/fastqs/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
+os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660045 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660045_1.fastq ~/pipline/raw_reads/fastqs/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
 
 import csv
 
@@ -54,7 +96,7 @@ sample2 = 'Donor 1'
 condition2 = '6dpi'
 fin2 = str('\n' + sample2 + '\t' + condition2 + '\t' + str(min2) + '\t' + str(med2) + '\t' + str(mean2) + '\t' + str(max2))
 
-data3 = read_tsv('/home/2025/cdotson/pipline/results/SRR5660044/abundance.tsv') # same but for sample 3 #
+data3 = read_tsv('./results/SRR5660044/abundance.tsv') # same but for sample 3 #
 
 tpm3 = list()
 for i in range(1, len(data3)):
@@ -86,7 +128,7 @@ sample4 = 'Donor 3'
 condition4 = '6dpi'
 fin4 = str('\n' + sample4 + '\t' + condition4 + '\t' + str(min4) + '\t' + str(med4) + '\t' + str(mean4) + '\t' + str(max4))
 
-with(open('/home/2025/cdotson/pipline/PipelineProject.log', 'a')) as f:
+with(open('PipelineProject.log', 'a')) as f:
     f.write(headers)
     f.write(fin1)
     f.write(fin2)
