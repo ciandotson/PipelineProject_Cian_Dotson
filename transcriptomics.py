@@ -120,7 +120,7 @@ for i in range(1, len(data4)):
 
 import statistics
 min4 = min(tpm4)
-max4 = max(tpm4)
+max4 = str(max(tpm4 + '\n')
 med4 = statistics.median(tpm4)
 mean4 = statistics.mean(tpm4)
 
