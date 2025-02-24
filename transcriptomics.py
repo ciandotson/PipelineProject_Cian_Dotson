@@ -39,7 +39,7 @@ def FastGen(fasta): # function that formats a fasta file to only contain the pro
     fin = ''.join(fin) # join the list into a string #
     return(fin)
 
-with open('hcmv_cds.fasta, 'w') as f:
+with open('hcmv_cds.fasta', 'w') as f:
     f.write(FastGen(infile))
 
 import os
