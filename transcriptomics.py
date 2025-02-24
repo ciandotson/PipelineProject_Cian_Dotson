@@ -137,3 +137,4 @@ with(open('PipelineProject.log', 'a')) as f:
 
 Rscript hcmv.R
 
+os.system('echo "$(cat hcmv_sigs.tsv)" >> PiplineProject.log')
