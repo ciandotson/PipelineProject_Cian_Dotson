@@ -49,10 +49,10 @@ os.system('echo "The HCMV genome (NC_006273.2) has $(cat cds_count) CDS." > Pipe
 os.system('kallisto index -i hcmv.idx hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
 os.system('mkdir ./results') # unix command to make a directory for the results to go #
 
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660030_1.fastq ~/pipline/raw_reads/fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660033_1.fastq ~/pipline/raw_reads/fastqs/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660044_1.fastq ~/pipline/raw_reads/fastqs/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660045 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660045_1.fastq ~/pipline/raw_reads/fastqs/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 ./fastqs/SRR5660030_1.fastq ./fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 ./fastqs/SRR5660033_1.fastq ./fastqs/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 ./fastqs/SRR5660044_1.fastq ./fastqs/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660045 -b 30 -t 4 ./fastqs/SRR5660045_1.fastq ./fastqs/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
 
 import csv
 
@@ -64,7 +64,7 @@ def read_tsv(file_path): # function that reads a tsv file when given the file pa
 
 
 headers = str('\nsample\tcondition\tmin_tpm\tmed_tpm\tmean_tpm\tmax_tpm') # this will be the first row of the table summarizing the tpm results #
-data1 = read_tsv('/home/2025/cdotson/pipline/results/SRR5660030/abundance.tsv') # the read tsv file of the first donor at the first time of infection
+data1 = read_tsv('./results/SRR5660030/abundance.tsv') # the read tsv file of the first donor at the first time of infection
 
 tpm1 = list() # open list that will contain all of the tpms for each individual transcript #
 for i in range(1, len(data1)): # over the length of the first tsv file (barring the first row) #
@@ -80,7 +80,7 @@ sample1 = 'Donor 1' # sample 1 is from donor 1#
 condition1 = '2dpi' # sample 1 was taken 2 days post infection #
 fin1 = str('\n' + sample1 + '\t' + condition1 + '\t' + str(min1) + '\t' + str(med1) + '\t' + str(mean1) + '\t' + str(max1)) # add each saved value to a string delimited by tabs \t #
 
-data2 = read_tsv('/home/2025/cdotson/pipline/results/SRR5660033/abundance.tsv') # same but for sample 2 #
+data2 = read_tsv('./results/SRR5660033/abundance.tsv') # same but for sample 2 #
 
 tpm2 = list()
 for i in range(1, len(data2)):
@@ -112,7 +112,7 @@ sample3 = 'Donor 3'
 condition3 = '2dpi'
 fin3 = str('\n' + sample3 + '\t' + condition3 + '\t' + str(min3) + '\t' + str(med3) + '\t' + str(mean3) + '\t' + str(max3))
 
-data4 = read_tsv('/home/2025/cdotson/pipline/results/SRR5660045/abundance.tsv') # same but for sample 4 #
+data4 = read_tsv('./results/SRR5660045/abundance.tsv') # same but for sample 4 #
 
 tpm4 = list()
 for i in range(1, len(data4)):
