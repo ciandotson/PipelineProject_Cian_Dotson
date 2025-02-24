@@ -93,4 +93,5 @@ with(open('/home/2025/cdotson/pipline/PipelineProject.log', 'a')) as f:
     f.write(fin3)
     f.write(fin4)
 
+Rscript hcmv.R
 
