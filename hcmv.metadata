@@ -1,0 +1,5 @@
+sample	donor	condition	path
+SRR5660030	1	2dpi	/home/2025/cdotson/pipline/results/SRR5660030
+SRR5660033	1	6dpi	/home/2025/cdotson/pipline/results/SRR5660033
+SRR5660044	3	2dpi	/home/2025/cdotson/pipline/results/SRR5660044
+SRR5660045	3	6dpi	/home/2025/cdotson/pipline/results/SRR5660045
