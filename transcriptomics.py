@@ -46,13 +46,13 @@ import os
 os.system('grep ">" hcmv_cds.fasta | wc -l | cat > cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
 os.system('echo "The HCMV genome (NC_006273.2) has $(cat cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
 
-os.system('kallisto index -i ~/blank/hcmv.idx ~/blank/hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
-os.system('mkdir ~/blank/results') # unix command to make a directory for the results to go #
+os.system('kallisto index -i hcmv.idx hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
+os.system('mkdir ./results') # unix command to make a directory for the results to go #
 
-os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660030 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660030_1.fastq ~/pipline/raw_reads/fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
-os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660033 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660033_1.fastq ~/pipline/raw_reads/fastqs/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
-os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660044 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660044_1.fastq ~/pipline/raw_reads/fastqs/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
-os.system('kallisto quant -i ~/blank/hcmv.idx -o ~/blank/results/SRR5660045 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660045_1.fastq ~/pipline/raw_reads/fastqs/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660030_1.fastq ~/pipline/raw_reads/fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660033_1.fastq ~/pipline/raw_reads/fastqs/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660044_1.fastq ~/pipline/raw_reads/fastqs/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
+os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660045 -b 30 -t 4 ~/pipline/raw_reads/fastqs/SRR5660045_1.fastq ~/pipline/raw_reads/fastqs/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
 
 import csv
 
