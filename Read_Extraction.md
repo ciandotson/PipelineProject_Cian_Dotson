@@ -33,4 +33,5 @@ These files are not yet readable as fastq files, but you can extract the fastq f
 # **Step 2: Downloading the Reference Genome of HCMV that only contains CDS sequences** 
 We are interested in getting the CDS reads from NCBi Accession NC_006273.2. To access just the CDS reads, you can run the following python script:
 
-`from Bio import SeqIO` 
+`from Bio import Entrez
+from Bio import SeqIO` 
