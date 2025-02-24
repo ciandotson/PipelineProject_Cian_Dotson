@@ -141,16 +141,28 @@ os.system('echo "$(cat hcmv_sigs.tsv)" >> PipelineProject.log') # write the outp
 
 os.system('bowtie2-build "hcmv_genome.fasta" ./hcmv_gen/hcmv_gen') # create a bowtie index from teh full genome of the virus #
 
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660030_1.fastq -2 ./fastqs/SRR5660030_2.fastq -S d1i2.sam --al-conc d1i2_mapped_reads.fq --un-conc d1i2_unmapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660033_1.fastq -2 ./fastqs/SRR5660033_2.fastq -S d1i6.sam --al-conc d1i6_mapped_reads.fq --un-conc d1i6_unmapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660044_1.fastq -2 ./fastqs/SRR5660044_2.fastq -S d3i2.sam --al-conc d3i2_mapped_reads.fq --un-conc d3i2_unmapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660045_1.fastq -2 ./fastqs/SRR5660045_2.fastq -S d3i6.sam --al-conc d3i6_mapped_reads.fq --un-conc d3i6_unmapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660030_1.fastq -2 ./fastqs/SRR5660030_2.fastq -S d1i2.sam --al-conc d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660033_1.fastq -2 ./fastqs/SRR5660033_2.fastq -S d1i6.sam --al-conc d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660044_1.fastq -2 ./fastqs/SRR5660044_2.fastq -S d3i2.sam --al-conc d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660045_1.fastq -2 ./fastqs/SRR5660045_2.fastq -S d3i6.sam --al-conc d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
 
-os.system('mkdir reads_unmapped')
 os.system('mkdir reads_mapped')
-os.system('mv *unmapped* reads_unmapped')
 os.system('mv *mapped* reads_mapped')
 
+os.system('grep "@SRR" ./fastqs/SRR5660030_2.fastq | wc -l | cat > d1i2_pre_count') 
 os.system('grep "@SRR" ./reads_mapped/d1i2_mapped_reads.2.fq | wc -l | cat > d1i2_read_count')
-os.system('grep "@SRR" ./reads_mapped/d1i2_unmapped_reads.2.fq | wc -l | cat > d1i2_unread_count')
-os.system('
+os.system('echo "Donor 1 (2dpi) had $(cat d1i2_pre_count) read pairs before Bowtie2 filtering and $(cat d1i2_read_count) read pairs after." | cat >> PipelineProject.log')
+
+os.system('grep "@SRR" ./fastqs/SRR5660033_2.fastq | wc -l | cat > d1i6_pre_count') 
+os.system('grep "@SRR" ./reads_mapped/d1i6_mapped_reads.2.fq | wc -l | cat > d1i6_read_count')
+os.system('echo "Donor 1 (6dpi) had $(cat d1i6_pre_count) read pairs before Bowtie2 filtering and $(cat d1i6_read_count) read pairs after." | cat >> PipelineProject.log')
+
+os.system('grep "@SRR" ./fastqs/SRR5660044_2.fastq | wc -l | cat > d3i2_pre_count') 
+os.system('grep "@SRR" ./reads_mapped/d3i2_mapped_reads.2.fq | wc -l | cat > d3i2_read_count')
+os.system('echo "Donor 3 (2dpi) had $(cat d3i2_pre_count) read pairs before Bowtie2 filtering and $(cat d3i2_read_count) read pairs after." | cat >> PipelineProject.log')
+
+os.system('grep "@SRR" ./fastqs/SRR5660045_2.fastq | wc -l | cat > d3i6_pre_count') 
+os.system('grep "@SRR" ./reads_mapped/d3i6_mapped_reads.2.fq | wc -l | cat > d3i6_read_count')
+os.system('echo "Donor 3 (6dpi) had $(cat d3i6_pre_count) read pairs before Bowtie2 filtering and $(cat d3i6_read_count) read pairs after." | cat >> PipelineProject.log')
+
+
