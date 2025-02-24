@@ -135,7 +135,7 @@ with(open('PipelineProject.log', 'a')) as f:
     f.write(fin3)
     f.write(fin4)
 
-os.system('Rscript hcmv.R')
+os.system('Rscript hcmv.R') # Rscript that analyzes the output of kallisto and gives differential gene expression #
 
 os.system('echo "$(cat hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
 
@@ -171,3 +171,5 @@ os.system('spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d1i2_ma
 os.system('spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d3i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d3i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d3i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d3i6_mapped_reads.2.fq -o d3_assembly/') # creates a de novo assembly using only the mapped reads for donor 3#
 os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d1i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d1i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d1i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d1i6_mapped_reads.2.fq -o d1_assembly/" | cat >> PipelineProject.log') # output the spades command for donor 1 to the end of PipelineProject.log #
 os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d3i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d3i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d3i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d3i6_mapped_reads.2.fq -o d3_assembly/" | cat >> PipelineProject.log') # output the spades command for donor 3 to the end of PipelineProject.log #
+
+# Point 7: Blasting the Longest Contig #
