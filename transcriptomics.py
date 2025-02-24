@@ -137,7 +137,12 @@ with(open('PipelineProject.log', 'a')) as f:
 
 os.system('Rscript hcmv.R')
 
-os.system('echo "$(cat hcmv_sigs.tsv)" >> PipelineProject.log')
+os.system('echo "$(cat hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
 
+os.system('bowtie2-build "hcmv_genome.fasta" ./hcmv_gen/hcmv_gen') # create a bowtie index from teh full genome of the virus #
 
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660030_1.fastq -2 ./fastqs/SRR5660030_2.fastq -S d1i2.sam' ) # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660033_1.fastq -2 ./fastqs/SRR5660033_2.fastq -S d1i6.sam') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660044_1.fastq -2 ./fastqs/SRR5660044_2.fastq -S d3i2.sam') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660045_1.fastq -2 ./fastqs/SRR5660045_2.fastq -S d3i6.sam') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
 
