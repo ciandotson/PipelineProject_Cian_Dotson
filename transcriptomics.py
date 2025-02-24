@@ -146,3 +146,11 @@ os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660033_1.fastq
 os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660044_1.fastq -2 ./fastqs/SRR5660044_2.fastq -S d3i2.sam --al-conc d3i2_mapped_reads.fq --un-conc d3i2_unmapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
 os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660045_1.fastq -2 ./fastqs/SRR5660045_2.fastq -S d3i6.sam --al-conc d3i6_mapped_reads.fq --un-conc d3i6_unmapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
 
+os.system('mkdir reads_unmapped')
+os.system('mkdir reads_mapped')
+os.system('mv *unmapped* reads_unmapped')
+os.system('mv *mapped* reads_mapped')
+
+os.system('grep "@SRR" ./reads_mapped/d1i2_mapped_reads.2.fq | wc -l | cat > d1i2_read_count')
+os.system('grep "@SRR" ./reads_mapped/d1i2_unmapped_reads.2.fq | wc -l | cat > d1i2_unread_count')
+os.system('
