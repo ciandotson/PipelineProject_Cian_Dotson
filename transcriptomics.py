@@ -139,30 +139,35 @@ os.system('Rscript hcmv.R')
 
 os.system('echo "$(cat hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
 
-os.system('bowtie2-build "hcmv_genome.fasta" ./hcmv_gen/hcmv_gen') # create a bowtie index from teh full genome of the virus #
+# Point 5: using bowtie2 to map the reads to the reference genome #
+os.system('bowtie2-build "hcmv_genome.fasta" ./hcmv_gen/hcmv_gen') # create a bowtie index from the full genome of the virus #
 
 os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660030_1.fastq -2 ./fastqs/SRR5660030_2.fastq -S d1i2.sam --al-conc d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
 os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660033_1.fastq -2 ./fastqs/SRR5660033_2.fastq -S d1i6.sam --al-conc d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
 os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660044_1.fastq -2 ./fastqs/SRR5660044_2.fastq -S d3i2.sam --al-conc d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
 os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660045_1.fastq -2 ./fastqs/SRR5660045_2.fastq -S d3i6.sam --al-conc d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
 
-os.system('mkdir reads_mapped')
-os.system('mv *mapped* reads_mapped')
+os.system('mkdir reads_mapped') # make a directory for the reads that were mapped to the reference genome by bowtie2 #
+os.system('mv *mapped* reads_mapped') # move all the reads that mapped to reads_mapped #
 
-os.system('grep "@SRR" ./fastqs/SRR5660030_2.fastq | wc -l | cat > d1i2_pre_count') 
-os.system('grep "@SRR" ./reads_mapped/d1i2_mapped_reads.2.fq | wc -l | cat > d1i2_read_count')
-os.system('echo "Donor 1 (2dpi) had $(cat d1i2_pre_count) read pairs before Bowtie2 filtering and $(cat d1i2_read_count) read pairs after." | cat >> PipelineProject.log')
+os.system('grep "@SRR" ./fastqs/SRR5660030_2.fastq | wc -l | cat > d1i2_pre_count') # find all of the gene entries in the original, unmapped file, count the number of occurences, and output it to the pre_count #
+os.system('grep "@SRR" ./reads_mapped/d1i2_mapped_reads.2.fq | wc -l | cat > d1i2_read_count') # find all of the gene entries of the mapped reads, count the number of occurences, and output it to the read_count #
+os.system('echo "Donor 1 (2dpi) had $(cat d1i2_pre_count) read pairs before Bowtie2 filtering and $(cat d1i2_read_count) read pairs after." | cat >> PipelineProject.log') # paste the text with the pre_count and read_cunt to the end of PipelineProject.log #
 
-os.system('grep "@SRR" ./fastqs/SRR5660033_2.fastq | wc -l | cat > d1i6_pre_count') 
+os.system('grep "@SRR" ./fastqs/SRR5660033_2.fastq | wc -l | cat > d1i6_pre_count')  # same as above just with the first donor 6 dpi #
 os.system('grep "@SRR" ./reads_mapped/d1i6_mapped_reads.2.fq | wc -l | cat > d1i6_read_count')
 os.system('echo "Donor 1 (6dpi) had $(cat d1i6_pre_count) read pairs before Bowtie2 filtering and $(cat d1i6_read_count) read pairs after." | cat >> PipelineProject.log')
 
-os.system('grep "@SRR" ./fastqs/SRR5660044_2.fastq | wc -l | cat > d3i2_pre_count') 
+os.system('grep "@SRR" ./fastqs/SRR5660044_2.fastq | wc -l | cat > d3i2_pre_count') # same as above except with third donor 2 dpi #
 os.system('grep "@SRR" ./reads_mapped/d3i2_mapped_reads.2.fq | wc -l | cat > d3i2_read_count')
 os.system('echo "Donor 3 (2dpi) had $(cat d3i2_pre_count) read pairs before Bowtie2 filtering and $(cat d3i2_read_count) read pairs after." | cat >> PipelineProject.log')
 
-os.system('grep "@SRR" ./fastqs/SRR5660045_2.fastq | wc -l | cat > d3i6_pre_count') 
+os.system('grep "@SRR" ./fastqs/SRR5660045_2.fastq | wc -l | cat > d3i6_pre_count') # same as above except with the third donor 6 dpi #
 os.system('grep "@SRR" ./reads_mapped/d3i6_mapped_reads.2.fq | wc -l | cat > d3i6_read_count')
 os.system('echo "Donor 3 (6dpi) had $(cat d3i6_pre_count) read pairs before Bowtie2 filtering and $(cat d3i6_read_count) read pairs after." | cat >> PipelineProject.log')
 
-
+# Point 6: Running SPAdes on the mapped reads #
+os.system('spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d1i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d1i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d1i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d1i6_mapped_reads.2.fq -o d1_assembly/') # creates a de novo assembly using only the mapped reads for donor 1#
+os.system('spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d3i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d3i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d3i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d3i6_mapped_reads.2.fq -o d3_assembly/') # creates a de novo assembly using only the mapped reads for donor 3#
+os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d1i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d1i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d1i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d1i6_mapped_reads.2.fq -o d1_assembly/" | cat >> PipelineProject.log') # output the spades command for donor 1 to the end of PipelineProject.log #
+os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d3i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d3i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d3i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d3i6_mapped_reads.2.fq -o d3_assembly/" | cat >> PipelineProject.log') # output the spades command for donor 3 to the end of PipelineProject.log #
