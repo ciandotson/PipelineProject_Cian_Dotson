@@ -39,20 +39,21 @@ def FastGen(fasta): # function that formats a fasta file to only contain the pro
     fin = ''.join(fin) # join the list into a string #
     return(fin)
 
-with open('hcmv_cds.fasta', 'w') as f:
+with open('./test_reads/hcmv_cds.fasta', 'w') as f:
     f.write(FastGen(infile))
 
 import os
-os.system('grep ">" hcmv_cds.fasta | wc -l | cat > cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
-os.system('echo "The HCMV genome (NC_006273.2) has $(cat cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
+os.system('grep ">" ./test_reads/hcmv_cds.fasta | wc -l | cat > ./counters/cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
+os.system('echo "The HCMV genome (NC_006273.2) has $(cat ./counters/cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
 
-os.system('kallisto index -i hcmv.idx hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
+os.system('mkdir ./index') # make a directory for the index for the cds reads #
+os.system('kallisto index -i ./index/hcmv.idx ./test_seqs/hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
 os.system('mkdir ./results') # unix command to make a directory for the results to go #
 
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 ./fastqs/SRR5660030_1.fastq ./fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 ./fastqs/SRR5660033_1.fastq ./fastqs/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 ./fastqs/SRR5660044_1.fastq ./fastqs/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
-os.system('kallisto quant -i hcmv.idx -o ./results/SRR5660045 -b 30 -t 4 ./fastqs/SRR5660045_1.fastq ./fastqs/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 ./test_fastqs/SRR5660030_1.fastq ./test_fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 ./test_fastqs/SRR5660033_1.fastq ./test_fastqs/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 ./test_fastqs/SRR5660044_1.fastq ./test_fastqs/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660045 -b 30 -t 4 ./test_fastqs/SRR5660045_1.fastq ./test_fastqs/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
 
 import csv
 
@@ -86,7 +87,6 @@ tpm2 = list()
 for i in range(1, len(data2)):
     tpm2.append(float(data2[i][4]))
 
-import statistics
 min2 = min(tpm2)
 max2 = max(tpm2)
 med2 = statistics.median(tpm2)
@@ -102,7 +102,6 @@ tpm3 = list()
 for i in range(1, len(data3)):
     tpm3.append(float(data3[i][4]))
 
-import statistics
 min3 = min(tpm3)
 max3 = max(tpm3)
 med3 = statistics.median(tpm3)
@@ -118,7 +117,6 @@ tpm4 = list()
 for i in range(1, len(data4)):
     tpm4.append(float(data4[i][4]))
 
-import statistics
 min4 = min(tpm4)
 max4 = str(max(tpm4)) + '\n'
 med4 = statistics.median(tpm4)
@@ -135,7 +133,7 @@ with(open('PipelineProject.log', 'a')) as f:
     f.write(fin3)
     f.write(fin4)
 
-os.system('Rscript hcmv.R') # Rscript that analyzes the output of kallisto and gives differential gene expression #
+os.system('Rscript ./hcmv.R') # Rscript that analyzes the output of kallisto and gives differential gene expression #
 
 os.system('echo "$(cat hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
 
