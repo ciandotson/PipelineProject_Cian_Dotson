@@ -48,7 +48,7 @@ os.system('grep ">" ./"$var"/hcmv_cds.fasta | wc -l | cat > ./counters/cds_count
 os.system('echo "The HCMV genome (NC_006273.2) has $(cat ./counters/cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
 
 os.system('mkdir ./index') # make a directory for the index for the cds reads #
-os.system('kallisto index -i ./index/hcmv.idx ./test_seqs/hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
+os.system('kallisto index -i ./index/hcmv.idx ./"$var"/hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
 os.system('mkdir ./results') # unix command to make a directory for the results to go #
 
 os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 ./"$var"/SRR5660030_1.fastq ./"$var"/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
