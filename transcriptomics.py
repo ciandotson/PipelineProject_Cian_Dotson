@@ -139,14 +139,14 @@ os.system('Rscript ./hcmv.R') # Rscript that analyzes the output of kallisto and
 os.system('echo "$(cat ./dge/hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
 
 # Point 5: using bowtie2 to map the reads to the reference genome #
-os.system('bowtie2-build "./reference/hcmv_genome.fasta" ./hcmv_gen/hcmv_gen') # create a bowtie index from the full genome of the virus #
+os.system('bowtie2-build "./reference/hcmv_genome.fasta" ./reference/hcmv_gen') # create a bowtie index from the full genome of the virus #
 
 os.system('mkdir sam_results') # make a directory to output the sam files from the bowtie2 alignment #
 os.system('mkdir reads_mapped') # make a directory for the reads that map to the reference genome #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660030_1.fastq -2 ./test_fastqs/SRR5660030_2.fastq -S ./sam_results/d1i2.sam --al-conc ./reads_mapped/d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660033_1.fastq -2 ./test_fastqs/SRR5660033_2.fastq -S ./sam_results/d1i6.sam --al-conc ./reads_mapped/d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660044_1.fastq -2 ./test_fastqs/SRR5660044_2.fastq -S ./sam_results/d3i2.sam --al-conc ./reads_mapped/d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660045_1.fastq -2 ./test_fastqs/SRR5660045_2.fastq -S ./sam_results/d3i6.sam --al-conc ./reads_mapped/d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./test_fastqs/SRR5660030_1.fastq -2 ./test_fastqs/SRR5660030_2.fastq -S ./sam_results/d1i2.sam --al-conc ./reads_mapped/d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./test_fastqs/SRR5660033_1.fastq -2 ./test_fastqs/SRR5660033_2.fastq -S ./sam_results/d1i6.sam --al-conc ./reads_mapped/d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./test_fastqs/SRR5660044_1.fastq -2 ./test_fastqs/SRR5660044_2.fastq -S ./sam_results/d3i2.sam --al-conc ./reads_mapped/d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./test_fastqs/SRR5660045_1.fastq -2 ./test_fastqs/SRR5660045_2.fastq -S ./sam_results/d3i6.sam --al-conc ./reads_mapped/d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
 
 os.system('mkdir reads_mapped') # make a directory for the reads that were mapped to the reference genome by bowtie2 #
 
@@ -217,7 +217,7 @@ with open('./new_contigs/d3_contig.fasta','w') as f:
 	f.write(fin3)
 
 os.system('mkdir blast_results') # make a directory for the blast results to be stored #
-os.system('makeblastdb -in ./reference/betaherpesvirinae_genom.fasta -out ./reference/betaherpesvirinae -title betaherpesvirinae -dbtype nucl') # make the blast database for the virus subfamily betaherpesvirinae #
+os.system('makeblastdb -in ./reference/betaherpesvirinae_genome.fasta -out ./reference/betaherpesvirinae -title betaherpesvirinae -dbtype nucl') # make the blast database for the virus subfamily betaherpesvirinae #
 os.system('blastn -query ./new_contigs/d1_contig.fasta -db ./reference/betaherpesvirinae -out ./blast_results/d1_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"') # blasting the longest contig from donor 1 to the beatherpesvirinae database #
 os.system('blastn -query ./new_contigs/d3_contig.fasta -db ./reference/betaherpesvirinae -out ./blast_results/d3_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"') # blasting the longest contig from donor 3 to the beatherpesvirinae database #
 
