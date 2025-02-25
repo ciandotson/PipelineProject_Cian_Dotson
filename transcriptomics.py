@@ -191,6 +191,9 @@ for i in range(0, len(seqs1)):
 
 fin1 = str('>' + maxid1 + '\n' + maxseq1)
 
+with open('d1_contig.fasta','w') as f:
+	f.write(fin1)
+
 raw_fasta3 = SeqIO.parse('./d3_assembly/contigs.fasta', 'fasta') 
 seqs3 = list()
 ids3 = list()
@@ -212,4 +215,14 @@ fin3 = str('>' + maxid3 + '\n' + maxseq3)
 with open('d3_contig.fasta','w') as f:
 	f.write(fin3)
 
-	
+os.system('makeblastdb -in betaherpesvirinae_genom.fasta -out ./reference/betaherpesvirinae -title betaherpesvirinae -dbtype nucl')
+os.system('blastn -query d1_contig.fasta -db ./reference/betaherpesvirinae -out d1_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"') 
+os.system('blastn -query d3_contig.fasta -db ./reference/betaherpesvirinae -out d3_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"')
+
+os.system('echo "Donor 1:" | cat >> PipelineProject.log')
+os.system('echo "sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle" | cat >> PipelineProject.log')
+os.system('head -n 10 d1_blastn.tsv | cat >> PipelineProject.log')
+
+os.system('echo "Donor 3:" | cat >> PipelineProject.log')
+os.system('echo "sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle" | cat >> PipelineProject.log')
+os.system('head -n 10 d3_blastn.tsv | cat >> PipelineProject.log')
