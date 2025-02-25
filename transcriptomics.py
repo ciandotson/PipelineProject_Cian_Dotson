@@ -43,6 +43,7 @@ with open('./test_reads/hcmv_cds.fasta', 'w') as f:
     f.write(FastGen(infile))
 
 import os
+os.system('mkdir counters') # make a directory for all of the counters in this pipeline #
 os.system('grep ">" ./test_reads/hcmv_cds.fasta | wc -l | cat > ./counters/cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
 os.system('echo "The HCMV genome (NC_006273.2) has $(cat ./counters/cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
 
@@ -135,34 +136,35 @@ with(open('PipelineProject.log', 'a')) as f:
 
 os.system('Rscript ./hcmv.R') # Rscript that analyzes the output of kallisto and gives differential gene expression #
 
-os.system('echo "$(cat hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
+os.system('echo "$(cat ./dge/hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
 
 # Point 5: using bowtie2 to map the reads to the reference genome #
-os.system('bowtie2-build "hcmv_genome.fasta" ./hcmv_gen/hcmv_gen') # create a bowtie index from the full genome of the virus #
+os.system('bowtie2-build "./reference/hcmv_genome.fasta" ./hcmv_gen/hcmv_gen') # create a bowtie index from the full genome of the virus #
 
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660030_1.fastq -2 ./fastqs/SRR5660030_2.fastq -S d1i2.sam --al-conc d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660033_1.fastq -2 ./fastqs/SRR5660033_2.fastq -S d1i6.sam --al-conc d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660044_1.fastq -2 ./fastqs/SRR5660044_2.fastq -S d3i2.sam --al-conc d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
-os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./fastqs/SRR5660045_1.fastq -2 ./fastqs/SRR5660045_2.fastq -S d3i6.sam --al-conc d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
+os.system('mkdir sam_results') # make a directory to output the sam files from the bowtie2 alignment #
+os.system('mkdir reads_mapped') # make a directory for the reads that map to the reference genome #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660030_1.fastq -2 ./test_fastqs/SRR5660030_2.fastq -S ./sam_results/d1i2.sam --al-conc ./reads_mapped/d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660033_1.fastq -2 ./test_fastqs/SRR5660033_2.fastq -S ./sam_results/d1i6.sam --al-conc ./reads_mapped/d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660044_1.fastq -2 ./test_fastqs/SRR5660044_2.fastq -S ./sam_results/d3i2.sam --al-conc ./reads_mapped/d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
+os.system('bowtie2 --quiet -x ./hcmv_gen/hcmv_gen -1 ./test_fastqs/SRR5660045_1.fastq -2 ./test_fastqs/SRR5660045_2.fastq -S ./sam_results/d3i6.sam --al-conc ./reads_mapped/d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
 
 os.system('mkdir reads_mapped') # make a directory for the reads that were mapped to the reference genome by bowtie2 #
-os.system('mv *mapped* reads_mapped') # move all the reads that mapped to reads_mapped #
 
-os.system('grep "@SRR" ./fastqs/SRR5660030_2.fastq | wc -l | cat > d1i2_pre_count') # find all of the gene entries in the original, unmapped file, count the number of occurences, and output it to the pre_count #
-os.system('grep "@SRR" ./reads_mapped/d1i2_mapped_reads.2.fq | wc -l | cat > d1i2_read_count') # find all of the gene entries of the mapped reads, count the number of occurences, and output it to the read_count #
-os.system('echo "Donor 1 (2dpi) had $(cat d1i2_pre_count) read pairs before Bowtie2 filtering and $(cat d1i2_read_count) read pairs after." | cat >> PipelineProject.log') # paste the text with the pre_count and read_cunt to the end of PipelineProject.log #
+os.system('grep "@SRR" ./test_fastqs/SRR5660030_2.fastq | wc -l | cat > ./counters/d1i2_pre_count') # find all of the gene entries in the original, unmapped file, count the number of occurences, and output it to the pre_count #
+os.system('grep "@SRR" ./reads_mapped/d1i2_mapped_reads.2.fq | wc -l | cat > ./counters/d1i2_read_count') # find all of the gene entries of the mapped reads, count the number of occurences, and output it to the read_count #
+os.system('echo "Donor 1 (2dpi) had $(cat ./counters/d1i2_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d1i2_read_count) read pairs after." | cat >> PipelineProject.log') # paste the text with the pre_count and read_cunt to the end of PipelineProject.log #
 
-os.system('grep "@SRR" ./fastqs/SRR5660033_2.fastq | wc -l | cat > d1i6_pre_count')  # same as above just with the first donor 6 dpi #
-os.system('grep "@SRR" ./reads_mapped/d1i6_mapped_reads.2.fq | wc -l | cat > d1i6_read_count')
-os.system('echo "Donor 1 (6dpi) had $(cat d1i6_pre_count) read pairs before Bowtie2 filtering and $(cat d1i6_read_count) read pairs after." | cat >> PipelineProject.log')
+os.system('grep "@SRR" ./test_fastqs/SRR5660033_2.fastq | wc -l | cat > ./counters/d1i6_pre_count')  # same as above just with the first donor 6 dpi #
+os.system('grep "@SRR" ./reads_mapped/d1i6_mapped_reads.2.fq | wc -l | cat > ./counters/d1i6_read_count')
+os.system('echo "Donor 1 (6dpi) had $(cat ./counters/d1i6_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d1i6_read_count) read pairs after." | cat >> PipelineProject.log')
 
-os.system('grep "@SRR" ./fastqs/SRR5660044_2.fastq | wc -l | cat > d3i2_pre_count') # same as above except with third donor 2 dpi #
-os.system('grep "@SRR" ./reads_mapped/d3i2_mapped_reads.2.fq | wc -l | cat > d3i2_read_count')
-os.system('echo "Donor 3 (2dpi) had $(cat d3i2_pre_count) read pairs before Bowtie2 filtering and $(cat d3i2_read_count) read pairs after." | cat >> PipelineProject.log')
+os.system('grep "@SRR" ./test_fastqs/SRR5660044_2.fastq | wc -l | cat > ./counters/d3i2_pre_count') # same as above except with third donor 2 dpi #
+os.system('grep "@SRR" ./reads_mapped/d3i2_mapped_reads.2.fq | wc -l | cat > ./counters/d3i2_read_count')
+os.system('echo "Donor 3 (2dpi) had $(cat ./counters/d3i2_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d3i2_read_count) read pairs after." | cat >> PipelineProject.log')
 
-os.system('grep "@SRR" ./fastqs/SRR5660045_2.fastq | wc -l | cat > d3i6_pre_count') # same as above except with the third donor 6 dpi #
-os.system('grep "@SRR" ./reads_mapped/d3i6_mapped_reads.2.fq | wc -l | cat > d3i6_read_count')
-os.system('echo "Donor 3 (6dpi) had $(cat d3i6_pre_count) read pairs before Bowtie2 filtering and $(cat d3i6_read_count) read pairs after." | cat >> PipelineProject.log')
+os.system('grep "@SRR" ./test_fastqs/SRR5660045_2.fastq | wc -l | cat > ./counters/d3i6_pre_count') # same as above except with the third donor 6 dpi #
+os.system('grep "@SRR" ./reads_mapped/d3i6_mapped_reads.2.fq | wc -l | cat > ./counters/d3i6_read_count')
+os.system('echo "Donor 3 (6dpi) had $(cat ./counters/d3i6_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d3i6_read_count) read pairs after." | cat >> PipelineProject.log')
 
 # Point 6: Running SPAdes on the mapped reads #
 os.system('spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d1i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d1i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d1i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d1i6_mapped_reads.2.fq -o d1_assembly/') # creates a de novo assembly using only the mapped reads for donor 1#
@@ -171,28 +173,29 @@ os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d
 os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d3i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d3i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d3i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d3i6_mapped_reads.2.fq -o d3_assembly/" | cat >> PipelineProject.log') # output the spades command for donor 3 to the end of PipelineProject.log #
 
 # Point 7: Blasting the Longest Contig #
-raw_fasta1 = SeqIO.parse('./d1_assembly/contigs.fasta', 'fasta') 
-seqs1 = list()
+os.system('mkdir new_contigs') # make new directory for all of the new contig fasta files #
+raw_fasta1 = SeqIO.parse('./d1_assembly/contigs.fasta', 'fasta') # parse the contig fasta for the donor one into raw_fasta1 # 
+seqs1 = list() 
 ids1 = list()
-for i in raw_fasta1:
-	seqs1.append(i.seq)
-	ids1.append(i.id)
+for i in raw_fasta1: # for every entry in the contig fasta #
+	seqs1.append(i.seq) # append each sequence to the list seqs1 #
+	ids1.append(i.id) # append each id to the list ids1 # 
 
 lenseq1 = 0
 maxseq1 = str()
 maxid1 = str()
-for i in range(0, len(seqs1)):
-	if len(seqs1[i]) > lenseq1:
-		maxseq1 = seqs1[i]
-		maxid1 = ids1[i]
-		lenseq1 = len(seqs1[i])
+for i in range(0, len(seqs1)): # over all seqs and ids #
+	if len(seqs1[i]) > lenseq1: # if the current sequence is longer than the counter #
+		maxseq1 = seqs1[i] # the current seq becomes the new longest seq #
+		maxid1 = ids1[i] # the current id becomes the new id with the longest seq #
+		lenseq1 = len(seqs1[i]) # the new longest seq length is the length of the current seq #
 
-fin1 = str('>' + maxid1 + '\n' + maxseq1)
+fin1 = str('>' + maxid1 + '\n' + maxseq1) # output the longest contig in fasta format #
 
-with open('d1_contig.fasta','w') as f:
-	f.write(fin1)
+with open('./new_contigs/d1_contig.fasta','w') as f:
+	f.write(fin1) # write the results to d1_contig.fasta #
 
-raw_fasta3 = SeqIO.parse('./d3_assembly/contigs.fasta', 'fasta') 
+raw_fasta3 = SeqIO.parse('./d3_assembly/contigs.fasta', 'fasta') # see above # 
 seqs3 = list()
 ids3 = list()
 for i in raw_fasta3:
@@ -210,17 +213,18 @@ for i in range(0, len(seqs3)):
 
 fin3 = str('>' + maxid3 + '\n' + maxseq3)
 
-with open('d3_contig.fasta','w') as f:
+with open('./new_contigs/d3_contig.fasta','w') as f:
 	f.write(fin3)
 
-os.system('makeblastdb -in betaherpesvirinae_genom.fasta -out ./reference/betaherpesvirinae -title betaherpesvirinae -dbtype nucl')
-os.system('blastn -query d1_contig.fasta -db ./reference/betaherpesvirinae -out d1_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"') 
-os.system('blastn -query d3_contig.fasta -db ./reference/betaherpesvirinae -out d3_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"')
+os.system('mkdir blast_results') # make a directory for the blast results to be stored #
+os.system('makeblastdb -in ./reference/betaherpesvirinae_genom.fasta -out ./reference/betaherpesvirinae -title betaherpesvirinae -dbtype nucl') # make the blast database for the virus subfamily betaherpesvirinae #
+os.system('blastn -query ./new_contigs/d1_contig.fasta -db ./reference/betaherpesvirinae -out ./blast_results/d1_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"') # blasting the longest contig from donor 1 to the beatherpesvirinae database #
+os.system('blastn -query ./new_contigs/d3_contig.fasta -db ./reference/betaherpesvirinae -out ./blast_results/d3_blastn.tsv -outfmt "6 sacc pident length qstart qend sstart send bitscore evalue stitle"') # blasting the longest contig from donor 3 to the beatherpesvirinae database #
 
-os.system('echo "Donor 1:" | cat >> PipelineProject.log')
-os.system('echo "sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle" | cat >> PipelineProject.log')
-os.system('head -n 10 d1_blastn.tsv | cat >> PipelineProject.log')
+os.system('echo "Donor 1:" | cat >> PipelineProject.log') # append Donor 1: to PipelineProject.log #
+os.system('echo "sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle" | cat >> PipelineProject.log') # append the column names to PipelineProject.log #
+os.system('head -n 10 ./blast_results/d1_blastn.tsv | cat >> PipelineProject.log') # append the first 10 lines of the donor 1 blast results to PipelineProject.log #
 
-os.system('echo "Donor 3:" | cat >> PipelineProject.log')
+os.system('echo "Donor 3:" | cat >> PipelineProject.log') # same as above except donor 3 #
 os.system('echo "sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle" | cat >> PipelineProject.log')
-os.system('head -n 10 d3_blastn.tsv | cat >> PipelineProject.log')
+os.system('head -n 10 ./blast_results/d3_blastn.tsv | cat >> PipelineProject.log')
