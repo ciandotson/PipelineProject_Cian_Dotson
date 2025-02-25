@@ -40,7 +40,7 @@ def FastGen(fasta): # function that formats a fasta file to only contain the pro
     return(fin)
 
 with open('hcmv_cds.fasta', 'w') as f:
-    f.write(FastGen('hcmv.cds'))
+    f.write(FastGen('./reference/hcmv.cds'))
 
 import os
 os.system('mkdir counters') # make a directory for all of the counters in this pipeline #
