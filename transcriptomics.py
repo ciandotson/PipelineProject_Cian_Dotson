@@ -228,3 +228,6 @@ os.system('head -n 10 ./blast_results/d1_blastn.tsv | cat >> PipelineProject.log
 os.system('echo "Donor 3:" | cat >> PipelineProject.log') # same as above except donor 3 #
 os.system('echo "sacc	pident	length	qstart	qend	sstart	send	bitscore	evalue	stitle" | cat >> PipelineProject.log')
 os.system('head -n 10 ./blast_results/d3_blastn.tsv | cat >> PipelineProject.log')
+
+with open(outfile, 'w') as f:
+	f.write(str('Thanks for using my tool!')
