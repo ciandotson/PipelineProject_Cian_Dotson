@@ -44,7 +44,7 @@ with open('./"$var"/hcmv_cds.fasta', 'w') as f:
 
 import os
 os.system('mkdir counters') # make a directory for all of the counters in this pipeline #
-os.system('grep ">" ./"$var"/hcmv_cds.fasta | wc -l | cat > ./counters/cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
+os.system('grep ">" "$var"/hcmv_cds.fasta | wc -l | cat > ./counters/cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
 os.system('echo "The HCMV genome (NC_006273.2) has $(cat ./counters/cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
 
 os.system('mkdir ./index') # make a directory for the index for the cds reads #
