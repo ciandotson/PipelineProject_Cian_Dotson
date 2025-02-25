@@ -51,10 +51,10 @@ os.system('mkdir ./index') # make a directory for the index for the cds reads #
 os.system('kallisto index -i ./index/hcmv.idx hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
 os.system('mkdir ./results') # unix command to make a directory for the results to go #
 
-os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 ./"$var"/SRR5660030_1.fastq ./"$var"/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
-os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 ./"$var"/SRR5660033_1.fastq ./"$var"/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
-os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 ./"$var"/SRR5660044_1.fastq ./"$var"/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
-os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660045 -b 30 -t 4 ./"$var"/SRR5660045_1.fastq ./"$var"/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 "$var"/SRR5660030_1.fastq "$var"/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 "$var"/SRR5660033_1.fastq "$var"/SRR5660033_2.fastq') # kallisto command that quantifies the number of reads from sample 2 #  
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 "$var"/SRR5660044_1.fastq "$var"/SRR5660044_2.fastq') # kallisto command that quantifies the number of reads from sample 3 #
+os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660045 -b 30 -t 4 "$var"/SRR5660045_1.fastq "$var"/SRR5660045_2.fastq') # kallisto command that quantifies the number of reads from sample 4 # 
 
 import csv
 
@@ -143,26 +143,26 @@ os.system('bowtie2-build "./reference/hcmv_genome.fasta" ./reference/hcmv_gen') 
 
 os.system('mkdir sam_results') # make a directory to output the sam files from the bowtie2 alignment #
 os.system('mkdir reads_mapped') # make a directory for the reads that map to the reference genome #
-os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./"$var"/SRR5660030_1.fastq -2 ./"$var"/SRR5660030_2.fastq -S ./sam_results/d1i2.sam --al-conc ./reads_mapped/d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
-os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./"$var"/SRR5660033_1.fastq -2 ./"$var"/SRR5660033_2.fastq -S ./sam_results/d1i6.sam --al-conc ./reads_mapped/d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
-os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./"$var"/SRR5660044_1.fastq -2 ./"$var"/SRR5660044_2.fastq -S ./sam_results/d3i2.sam --al-conc ./reads_mapped/d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
-os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 ./"$var"/SRR5660045_1.fastq -2 ./"$var"/SRR5660045_2.fastq -S ./sam_results/d3i6.sam --al-conc ./reads_mapped/d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 "$var"/SRR5660030_1.fastq -2 "$var"/SRR5660030_2.fastq -S ./sam_results/d1i2.sam --al-conc ./reads_mapped/d1i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 1 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 "$var"/SRR5660033_1.fastq -2 "$var"/SRR5660033_2.fastq -S ./sam_results/d1i6.sam --al-conc ./reads_mapped/d1i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 2 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 "$var"/SRR5660044_1.fastq -2 "$var"/SRR5660044_2.fastq -S ./sam_results/d3i2.sam --al-conc ./reads_mapped/d3i2_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 3 #
+os.system('bowtie2 --quiet -x ./reference/hcmv_gen -1 "$var"/SRR5660045_1.fastq -2 "$var"/SRR5660045_2.fastq -S ./sam_results/d3i6.sam --al-conc ./reads_mapped/d3i6_mapped_reads.fq') # map the reads from the transcriptome to the refernce genome of the virus in sample 4 #
 
 os.system('mkdir reads_mapped') # make a directory for the reads that were mapped to the reference genome by bowtie2 #
 
-os.system('grep "@SRR" ./"$var"/SRR5660030_2.fastq | wc -l | cat > ./counters/d1i2_pre_count') # find all of the gene entries in the original, unmapped file, count the number of occurences, and output it to the pre_count #
+os.system('grep "@SRR" "$var"/SRR5660030_2.fastq | wc -l | cat > ./counters/d1i2_pre_count') # find all of the gene entries in the original, unmapped file, count the number of occurences, and output it to the pre_count #
 os.system('grep "@SRR" ./reads_mapped/d1i2_mapped_reads.2.fq | wc -l | cat > ./counters/d1i2_read_count') # find all of the gene entries of the mapped reads, count the number of occurences, and output it to the read_count #
 os.system('echo "Donor 1 (2dpi) had $(cat ./counters/d1i2_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d1i2_read_count) read pairs after." | cat >> PipelineProject.log') # paste the text with the pre_count and read_cunt to the end of PipelineProject.log #
 
-os.system('grep "@SRR" ./"$var"/SRR5660033_2.fastq | wc -l | cat > ./counters/d1i6_pre_count')  # same as above just with the first donor 6 dpi #
+os.system('grep "@SRR" "$var"/SRR5660033_2.fastq | wc -l | cat > ./counters/d1i6_pre_count')  # same as above just with the first donor 6 dpi #
 os.system('grep "@SRR" ./reads_mapped/d1i6_mapped_reads.2.fq | wc -l | cat > ./counters/d1i6_read_count')
 os.system('echo "Donor 1 (6dpi) had $(cat ./counters/d1i6_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d1i6_read_count) read pairs after." | cat >> PipelineProject.log')
 
-os.system('grep "@SRR" ./"$var"/SRR5660044_2.fastq | wc -l | cat > ./counters/d3i2_pre_count') # same as above except with third donor 2 dpi #
+os.system('grep "@SRR" "$var"/SRR5660044_2.fastq | wc -l | cat > ./counters/d3i2_pre_count') # same as above except with third donor 2 dpi #
 os.system('grep "@SRR" ./reads_mapped/d3i2_mapped_reads.2.fq | wc -l | cat > ./counters/d3i2_read_count')
 os.system('echo "Donor 3 (2dpi) had $(cat ./counters/d3i2_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d3i2_read_count) read pairs after." | cat >> PipelineProject.log')
 
-os.system('grep "@SRR" ./"$var"/SRR5660045_2.fastq | wc -l | cat > ./counters/d3i6_pre_count') # same as above except with the third donor 6 dpi #
+os.system('grep "@SRR" "$var"/SRR5660045_2.fastq | wc -l | cat > ./counters/d3i6_pre_count') # same as above except with the third donor 6 dpi #
 os.system('grep "@SRR" ./reads_mapped/d3i6_mapped_reads.2.fq | wc -l | cat > ./counters/d3i6_read_count')
 os.system('echo "Donor 3 (6dpi) had $(cat ./counters/d3i6_pre_count) read pairs before Bowtie2 filtering and $(cat ./counters/d3i6_read_count) read pairs after." | cat >> PipelineProject.log')
 
