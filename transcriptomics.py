@@ -18,6 +18,7 @@ args = check_arg(sys.argv[1:])
 infile = args.input
 outfile = args.output
 
+import os
 os.system('var="demo_fastq"')
 # formating the CDS entries of HCMV into a fasta that only contains the protein IDs as entries #
 from Bio import SeqIO
@@ -42,7 +43,6 @@ def FastGen(fasta): # function that formats a fasta file to only contain the pro
 with open('hcmv_cds.fasta', 'w') as f:
     f.write(FastGen('./reference/hcmv.cds'))
 
-import os
 os.system('mkdir counters') # make a directory for all of the counters in this pipeline #
 os.system('grep ">" hcmv_cds.fasta | wc -l | cat > ./counters/cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
 os.system('echo "The HCMV genome (NC_006273.2) has $(cat ./counters/cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
