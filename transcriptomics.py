@@ -19,7 +19,7 @@ infile = args.input
 outfile = args.output
 
 import os
-os.system('var="demo_fastq"')
+os.system('var="demo_fastqs"')
 # formating the CDS entries of HCMV into a fasta that only contains the protein IDs as entries #
 from Bio import SeqIO
 import re
