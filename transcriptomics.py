@@ -19,7 +19,7 @@ infile = args.input
 outfile = args.output
 
 import os
-os.system('var="demo_fastqs"')
+
 # formating the CDS entries of HCMV into a fasta that only contains the protein IDs as entries #
 from Bio import SeqIO
 import re
@@ -50,7 +50,7 @@ os.system('echo "The HCMV genome (NC_006273.2) has $(cat ./counters/cds_count) C
 os.system('mkdir ./index') # make a directory for the index for the cds reads #
 os.system('kallisto index -i ./index/hcmv.idx hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
 os.system('mkdir ./results') # unix command to make a directory for the results to go #
-
+os.system('var="demo_fastqs"')
 os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 "$var/SRR5660030_1.fastq" "$var/SRR5660030_2.fastq"') # kallisto command that quantifies the number of reads from sample 1 #
 os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660033 -b 30 -t 4 "$var/SRR5660033_1.fastq" "$var"/SRR5660033_2.fastq"') # kallisto command that quantifies the number of reads from sample 2 #  
 os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660044 -b 30 -t 4 "$var/SRR5660044_1.fastq" "$var"/SRR5660044_2.fastq"') # kallisto command that quantifies the number of reads from sample 3 #
