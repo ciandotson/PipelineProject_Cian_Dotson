@@ -18,7 +18,7 @@ args = check_arg(sys.argv[1:])
 infile = args.input
 outfile = args.output
 
-var=infile
+var=str(infile)
 # formating the CDS entries of HCMV into a fasta that only contains the protein IDs as entries #
 from Bio import SeqIO
 import re
