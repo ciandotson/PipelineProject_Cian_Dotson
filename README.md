@@ -2,7 +2,7 @@
 This repository is a walkthrough of an analysis of the transcriptomes of individuals 2 and 6 days post infection (dpi) with Huamn herpevirus, or Huamn cytomegalovirus, or HCMV.
 
 # **Step 1: Downloading the Raw Fastq Files**
-The raw fastq files for RNA-Seq data we are interested in ar found in these four links:
+The raw fastq files for RNA-Seq data we are interested in are found in these four links:
 
 Donor 1 (2dpi): https://sra-pub-run-odp.s3.amazonaws.com/sra/SRR5660030/SRR5660030
 
@@ -31,3 +31,8 @@ These files are not yet readable as fastq files, but you can extract the fastq f
 `fasterq-dump SRR5660044`
 
 `fasterq-dump SRR5660045`
+For ease, a subset of the data are stored in the ./reference directory when you download this direcetory.
+# **Step 2: Downloading the dependencies **:
+In order to run this pipeline, you need to following software installed. They are listed in order of appearance in the pipeline:
+* Python *
+  
