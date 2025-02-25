@@ -173,3 +173,43 @@ os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d
 os.system('echo "spades.py -k 77 -t 2 --only-assembler --pe-1 1 ./reads_mapped/d3i2_mapped_reads.1.fq --pe-2 1 ./reads_mapped/d3i2_mapped_reads.2.fq --pe-1 2 ./reads_mapped/d3i6_mapped_reads.1.fq --pe-2 2 ./reads_mapped/d3i6_mapped_reads.2.fq -o d3_assembly/" | cat >> PipelineProject.log') # output the spades command for donor 3 to the end of PipelineProject.log #
 
 # Point 7: Blasting the Longest Contig #
+raw_fasta1 = SeqIO.parse('./d1_assembly/contigs.fasta', 'fasta') 
+seqs1 = list()
+ids1 = list()
+for i in raw_fasta1:
+	seqs1.append(i.seq)
+	ids1.append(i.id)
+
+lenseq1 = 0
+maxseq1 = str()
+maxid1 = str()
+for i in range(0, len(seqs1)):
+	if len(seqs1[i]) > lenseq1:
+		maxseq1 = seqs1[i]
+		maxid1 = ids1[i]
+		lenseq1 = len(seqs1[i])
+
+fin1 = str('>' + maxid1 + '\n' + maxseq1)
+
+raw_fasta3 = SeqIO.parse('./d3_assembly/contigs.fasta', 'fasta') 
+seqs3 = list()
+ids3 = list()
+for i in raw_fasta3:
+	seqs3.append(i.seq)
+	ids3.append(i.id)
+
+lenseq3 = 0
+maxseq3 = str()
+maxid3 = str()
+for i in range(0, len(seqs3)):
+	if len(seqs3[i]) > lenseq3:
+		maxseq3 = seqs3[i]
+		maxid3 = ids3[i]
+		lenseq3 = len(seqs3[i])
+
+fin3 = str('>' + maxid3 + '\n' + maxseq3)
+
+with open('d3_contig.fasta','w') as f:
+	f.write(fin3)
+
+	
