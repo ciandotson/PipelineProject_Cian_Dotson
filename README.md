@@ -33,8 +33,11 @@ These files are not yet readable as fastq files, but you can extract the fastq f
 `fasterq-dump SRR5660045`
 For ease, a subset of the data are stored in the ./reference directory when you download this direcetory.
 
-# **Step 2: Downloading the dependencies**:
+# **Step 2: Downloading the Dependencies**:
 In order to run this pipeline, you need to following software installed. They are listed in order of appearance in the pipeline:
 
 # *Python*
+Install: https://www.python.org/downloads/
+
+# 
   
