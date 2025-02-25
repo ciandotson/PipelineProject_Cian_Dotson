@@ -16,5 +16,5 @@ sleuth.res <- sleuth_results(sleuth.obj, 'condition.re:condition.fit', 'lrt', sh
 sleuth.filt <- dplyr::filter(sleuth.res, qval <= 0.05) |> dplyr::arrange(pval) # filter out q-values after FDR that are less than 0.05 and order the remaining pvals in ascending order #
 sleuth.fin <- dplyr::select(sleuth.filt, target_id, test_stat, pval, qval) # take only the target_id, test_stat, pval, and qval columns of the data frame #
 
-write.table(sleuth.fin, 'hcmv_sigs.tsv', sep = '\t', row.names = FALSE) # write the data frame as a tsv file #
+write.table(sleuth.fin, './dge/hcmv_sigs.tsv', sep = '\t', row.names = FALSE) # write the data frame as a tsv file #
 
