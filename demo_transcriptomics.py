@@ -40,15 +40,15 @@ def FastGen(fasta): # function that formats a fasta file to only contain the pro
     fin = ''.join(fin) # join the list into a string #
     return(fin)
 
-with open('hcmv_cds.fasta', 'w') as f:
+with open('./reference/hcmv_cds.fasta', 'w') as f:
     f.write(FastGen('./reference/hcmv.cds'))
 
 os.system('mkdir counters') # make a directory for all of the counters in this pipeline #
-os.system('grep ">" hcmv_cds.fasta | wc -l | cat > ./counters/cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
+os.system('grep ">" ./reference/hcmv_cds.fasta | wc -l | cat > ./counters/cds_count') # unix command that finds all the > in the file, counts the number of times in appears, and writes it into cds_count #
 os.system('echo "The HCMV genome (NC_006273.2) has $(cat ./counters/cds_count) CDS." > PipelineProject.log') # unix command that states the words The HCMV genome (NC_006273.2) has (whatever is in cds_counts) CDS # 
 
 os.system('mkdir ./index') # make a directory for the index for the cds reads #
-os.system('kallisto index -i ./index/hcmv.idx hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
+os.system('kallisto index -i ./index/hcmv.idx ./reference/hcmv_cds.fasta') # kallisto command in which an index is made from the viral reference genome #
 os.system('mkdir ./results') # unix command to make a directory for the results to go #
 os.system('var="demo_fastqs"')
 os.system('kallisto quant -i ./index/hcmv.idx -o ./results/SRR5660030 -b 30 -t 4 demo_fastqs/SRR5660030_1.fastq demo_fastqs/SRR5660030_2.fastq') # kallisto command that quantifies the number of reads from sample 1 #
