@@ -36,11 +36,13 @@ For ease, a subset of the data are stored in the ./reference directory when you 
 # **Step 2: Downloading the Dependencies**:
 In order to run this pipeline, you need to following software installed. They are listed in order of appearance in the pipeline:
 
-**python version 3.10.12**: https://www.python.org/downloads/ (most versions will probably work)
+**python version 3.10.12**: https://www.python.org/downloads/ 
 
-**argparse version 1.4.0**: https://pypi.org/project/argparse/ (if not already installed within python)
+Downloading this version of python will have the modules **argparse**, **sys**, **os**, **re**, and **csv** already installed
 
-**os-sys version 2.1.4**: https://pypi.org/project/os-sys/
+**biopython version 1.83**: https://biopython.org/wiki/Download 
+
+**
 
 
 
