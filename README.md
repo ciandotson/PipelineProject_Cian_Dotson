@@ -57,7 +57,13 @@ Downloading this version of python will have the modules **argparse**, **sys**, 
 **blast+ version 2.12.0**: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
 
 # **Step 3: Using demo_transcriptomics.py**:
-To run 
+Clone this repository to your local server using the following command:
+
+`git clone https://github.com/ciandotson/PipelineProject_Cian_Dotson.git`
+
+From the root of this repository, simply run the command: 
+
+`python demo_transcriptomics.py -i demo_fastqs -o special_message.txt`
 
 
 
