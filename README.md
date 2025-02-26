@@ -36,7 +36,9 @@ For ease, a subset of the data are stored in the ./reference directory when you 
 # **Step 2: Downloading the Dependencies**:
 In order to run this pipeline, you need to following software installed. They are listed in order of appearance in the pipeline:
 
-**Python version 3.10.12**: https://www.python.org/downloads/ (most versions will probably work)
+**python version 3.10.12**: https://www.python.org/downloads/ (most versions will probably work)
+**argparse version 1.4.0**: https://pypi.org/project/argparse/ (if not already installed within python)
+
 
 
   
