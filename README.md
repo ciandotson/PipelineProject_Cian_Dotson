@@ -34,15 +34,31 @@ These files are not yet readable as fastq files, but you can extract the fastq f
 For ease, a subset of the data are stored in the ./reference directory when you download this direcetory.
 
 # **Step 2: Downloading the Dependencies**:
-In order to run this pipeline, you need to following software installed. They are listed in order of appearance in the pipeline:
+In order to run this pipeline, you need the following software installed. The links to their installation instructions are listed in order of appearance in the pipeline below:
 
 **python version 3.10.12**: https://www.python.org/downloads/ 
 
-Downloading this version of python will have the modules **argparse**, **sys**, **os**, **re**, and **csv** already installed
+Downloading this version of python will have the modules **argparse**, **sys**, **os**, **re**, **csv**, and **statitsics** already installed
 
 **biopython version 1.83**: https://biopython.org/wiki/Download 
 
-**
+**kallisto version 0.51.1**: https://github.com/pachterlab/kallisto 
+
+**R version 4.4.2**: https://repo.miserver.it.umich.edu/cran/ 
+
+**sleuth version 0.30.1**: https://github.com/pachterlab/sleuth
+
+**dplyr version 1.1.4**: https://cran.r-project.org/web/packages/dplyr/readme/README.html
+
+**bowtie2 version 2.4.4**: https://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#obtaining-bowtie-2
+
+**SPAdes version 4.0.0**: https://github.com/ablab/spades/releases/tag/v4.1.0
+
+**blast+ version 2.12.0**: https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/
+
+# **Step 3: Using demo_transcriptomics.py**:
+To run 
+
 
 
 
