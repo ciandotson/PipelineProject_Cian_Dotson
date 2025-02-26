@@ -133,7 +133,7 @@ with(open('PipelineProject.log', 'a')) as f:
     f.write(fin2)
     f.write(fin3)
     f.write(fin4)
-
+os.system('mkdir dge') # make a directory for where the results of the differential gene expression are output #
 os.system('Rscript ./hcmv.R') # Rscript that analyzes the output of kallisto and gives differential gene expression #
 
 os.system('echo "$(cat ./dge/hcmv_sigs.tsv)" >> PipelineProject.log') # write the output of the significant results to PipelineProject.log #
