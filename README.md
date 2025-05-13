@@ -1,5 +1,5 @@
 # PipelineProject_Cian_Dotson
-This repository is a walkthrough of an analysis of the transcriptomes of individuals 2 and 6 days post infection (dpi) with Huamn herpevirus, or Huamn cytomegalovirus, or HCMV.
+This repository is a walkthrough of an analysis of the transcriptomes of individuals 2 and 6 days post infection (dpi) with Huamn herpevirus, or Human cytomegalovirus, or HCMV.
 
 # **Step 1: Downloading the Raw Fastq Files**
 The raw fastq files for RNA-Seq data we are interested in are found in these four links:
